@@ -2,6 +2,77 @@
 
 Go bindings for GNU Make dynamic object loading.
 
-Generated with <https://github.com/xlab/c-for-go>.
-
 <https://www.gnu.org/software/make/manual/html_node/Loading-Objects.html>
+
+## Usage
+
+A plugin is a `main` package built as a shared object.
+make derives the setup symbol from the object's base name, so `hello.so` must export `hello_gmk_setup`.
+
+```go
+//go:build makeplugin
+
+package main
+
+/*
+#include <gnumake.h>
+*/
+import "C"
+
+import (
+	"strings"
+
+	gnumake "github.com/unmango/gnumake-go"
+)
+
+func main() {}
+
+//export hello_gmk_setup
+func hello_gmk_setup(*C.gmk_floc) C.int {
+	gnumake.AddFunction("hello-upper", upper, 1, 1, gnumake.FuncDefault)
+	gnumake.Eval("HELLO_FROM_PLUGIN := yes", nil)
+	return 1
+}
+
+func upper(_ string, args []string) string {
+	return strings.ToUpper(args[0])
+}
+```
+
+Build it and load it:
+
+```sh
+go build -tags makeplugin -buildmode=c-shared -o hello.so ./examples/hello
+```
+
+make searches the dynamic loader's path for a bare name, so give it an explicit relative path:
+
+```make
+load ./hello.so
+
+all:
+	@echo $(hello-upper abc)      # ABC
+	@echo $(HELLO_FROM_PLUGIN)    # yes
+```
+
+The build tag keeps the plugin out of `go build ./...`, which cannot link a `main` package against symbols that only exist inside make.
+
+`plugin_is_GPL_compatible` is defined by this package, so importing it satisfies make's check.
+
+## Layout
+
+`internal/gmk` holds the raw bindings, generated from `gnumake.h` with [c-for-go](https://github.com/xlab/c-for-go).
+Run `make gen` to regenerate them.
+
+The root package is written by hand.
+`gmk_add_function` needs a callback bridge that copies its result into `gmk_alloc` memory, and `gmk_expand` returns a NUL-terminated buffer the caller must free, neither of which c-for-go can express.
+
+## Development
+
+```sh
+nix develop      # go, ginkgo, gomod2nix, and gnumake.h on CGO_CFLAGS
+make test        # ginkgo run -r
+make build       # nix build .#
+```
+
+The specs build a fixture plugin from `test/testdata/plugin` and run real make against it, since the bindings resolve their symbols from the loading process.
