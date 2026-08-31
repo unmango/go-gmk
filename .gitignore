@@ -1,5 +1,7 @@
+/result*
+.envrc
+.direnv/
 bin/
-.make/
 
 # c-for-go output path
 gnumake/
