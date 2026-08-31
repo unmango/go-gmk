@@ -5,3 +5,6 @@ bin/
 
 # c-for-go output path
 gnumake/
+
+# staged copy of the gnumake header
+/gnumake.h
