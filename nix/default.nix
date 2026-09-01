@@ -1,6 +1,7 @@
 {
   buildGoApplication,
   lib,
+  ginkgo,
   gnumake,
   version,
 }:
@@ -15,7 +16,9 @@ buildGoApplication {
   buildInputs = [ gnumake ];
   CGO_CFLAGS = "-I${gnumake}/include";
 
-  # There are no suites yet and ginkgo treats that as a failure. The test
-  # layer adds the suite and turns this back on.
-  doCheck = false;
+  nativeCheckInputs = [ ginkgo ];
+
+  checkPhase = ''
+    ginkgo run ./...
+  '';
 }
