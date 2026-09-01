@@ -56,6 +56,10 @@
             # output rather than a separate dev output.
             CGO_CFLAGS = "-I${pkgs.gnumake}/include";
 
+            # c-for-go honors neither CGO_CFLAGS nor CPATH, so the generate
+            # rule stages the header where its include path finds it.
+            GNUMAKE_INCLUDE = "${pkgs.gnumake}/include";
+
             GO = "${pkgs.go}/bin/go";
             GOMOD2NIX = "${pkgs.gomod2nix}/bin/gomod2nix";
             GINKGO = "${pkgs.ginkgo}/bin/ginkgo";
