@@ -1,6 +1,8 @@
-# GNU Make Go
+# go-gmk
 
-Go bindings for GNU Make dynamic object loading.
+Go bindings for the GNU Make loadable object API.
+
+The package binds the `gmk_` functions `gnumake.h` declares, which are what a shared object loaded with make's `load` directive can call.
 
 <https://www.gnu.org/software/make/manual/html_node/Loading-Objects.html>
 
@@ -22,15 +24,15 @@ import "C"
 import (
 	"strings"
 
-	gnumake "github.com/unmango/gnumake-go"
+	"github.com/unmango/go-gmk"
 )
 
 func main() {}
 
 //export hello_gmk_setup
 func hello_gmk_setup(*C.gmk_floc) C.int {
-	gnumake.AddFunction("hello-upper", upper, 1, 1, gnumake.FuncDefault)
-	gnumake.Eval("HELLO_FROM_PLUGIN := yes", nil)
+	gmk.AddFunction("hello-upper", upper, 1, 1, gmk.FuncDefault)
+	gmk.Eval("HELLO_FROM_PLUGIN := yes", nil)
 	return 1
 }
 
@@ -61,10 +63,10 @@ The build tag keeps the plugin out of `go build ./...`, which cannot link a `mai
 
 ## Layout
 
-`internal/gmk` holds the raw bindings, generated from `gnumake.h` with [c-for-go](https://github.com/xlab/c-for-go).
+`internal/gnumake` holds the raw bindings, generated from `gnumake.h` with [c-for-go](https://github.com/xlab/c-for-go).
 Run `make gen` to regenerate them.
 
-The root package is written by hand.
+The root package, `gmk`, is written by hand.
 `gmk_add_function` needs a callback bridge that copies its result into `gmk_alloc` memory, and `gmk_expand` returns a NUL-terminated buffer the caller must free, neither of which c-for-go can express.
 
 ## Development

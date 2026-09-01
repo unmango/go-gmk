@@ -6,7 +6,7 @@
   version,
 }:
 buildGoApplication {
-  pname = "gnumake-go";
+  pname = "go-gmk";
   inherit version;
 
   src = lib.cleanSource ../.;
