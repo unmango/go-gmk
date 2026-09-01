@@ -77,4 +77,12 @@ make test        # ginkgo run -r
 make build       # nix build .#
 ```
 
-The specs build a fixture plugin from `test/testdata/plugin` and run real make against it, since the bindings resolve their symbols from the loading process.
+The specs build fixture plugins from `test/testdata` and run real make against them, since the bindings resolve their symbols from the loading process.
+`test/testdata/plugin` registers everything the specs call; `badsetup` and `nogpl` are the two ways a load can fail.
+
+The suite skips itself when the make on `PATH` is older than 4.3, which is where the `load` directive arrived.
+Specs labelled `slow` cover parallel builds and memory growth:
+
+```sh
+ginkgo run --label-filter='!slow' ./test   # the fast subset
+```
