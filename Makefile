@@ -10,9 +10,7 @@ GNUMAKE_INCLUDE ?= /usr/include
 
 GO_SRC ?= $(shell find . -name '*.go')
 
-CGO_SRC     := $(addprefix cgo_helpers,.h .go .c)
-GEN_SRC     := $(addsuffix .go,types gnumake)
-GNUMAKE_SRC := $(addprefix gnumake/,${CGO_SRC} ${GEN_SRC})
+GMK_SRC := $(addprefix internal/gmk/,cgo_helpers.go cgo_helpers.h doc.go gmk.go types.go)
 
 build:
 	nix build .#
@@ -20,7 +18,7 @@ build:
 test:
 	$(GINKGO) run -r
 
-generate gen: ${CGO_SRC} ${GEN_SRC}
+generate gen: ${GMK_SRC}
 
 update:
 	nix flake update
@@ -36,10 +34,8 @@ tidy: go.sum nix/gomod2nix.toml
 gnumake.h: ${GNUMAKE_INCLUDE}/gnumake.h
 	cp $< $@
 
-${GNUMAKE_SRC}: gnumake.yml gnumake.h
-	$(CFORGO) -out ${CURDIR} $<
-${GEN_SRC} ${CGO_SRC}: ${GNUMAKE_SRC}
-	cp $? .
+${GMK_SRC} &: gnumake.yml gnumake.h
+	$(CFORGO) -out ${CURDIR}/internal $<
 
 go.sum: go.mod ${GO_SRC}
 	$(GO) mod tidy
