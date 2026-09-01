@@ -1,4 +1,4 @@
-module github.com/unmango/gnumake-go
+module github.com/unmango/go-gmk
 
 go 1.25.0
 

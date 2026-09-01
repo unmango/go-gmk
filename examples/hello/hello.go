@@ -20,19 +20,19 @@ import (
 	"strconv"
 	"strings"
 
-	gnumake "github.com/unmango/gnumake-go"
+	"github.com/unmango/go-gmk"
 )
 
 func main() {}
 
 //export hello_gmk_setup
 func hello_gmk_setup(*C.gmk_floc) C.int {
-	gnumake.AddFunction("hello-upper", upper, 1, 1, gnumake.FuncDefault)
-	gnumake.AddFunction("hello-join", join, 1, 0, gnumake.FuncDefault)
-	gnumake.AddFunction("hello-repeat", repeat, 1, 1, gnumake.FuncDefault)
-	gnumake.AddFunction("hello-expand", expand, 1, 1, gnumake.FuncDefault)
+	gmk.AddFunction("hello-upper", upper, 1, 1, gmk.FuncDefault)
+	gmk.AddFunction("hello-join", join, 1, 0, gmk.FuncDefault)
+	gmk.AddFunction("hello-repeat", repeat, 1, 1, gmk.FuncDefault)
+	gmk.AddFunction("hello-expand", expand, 1, 1, gmk.FuncDefault)
 
-	gnumake.Eval("HELLO_FROM_PLUGIN := yes", nil)
+	gmk.Eval("HELLO_FROM_PLUGIN := yes", nil)
 
 	return 1
 }
@@ -61,5 +61,5 @@ func repeat(_ string, args []string) string {
 }
 
 func expand(_ string, args []string) string {
-	return gnumake.Expand(args[0])
+	return gmk.Expand(args[0])
 }

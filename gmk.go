@@ -1,4 +1,4 @@
-// Package gnumake provides Go bindings for GNU Make dynamic object loading.
+// Package gmk provides Go bindings for the GNU Make loadable object API.
 //
 // The functions here are only callable from inside a make process that has
 // loaded the compiled object with the load directive. Build a plugin with
@@ -8,7 +8,7 @@
 //	load plugin.so
 //
 // See https://www.gnu.org/software/make/manual/html_node/Loading-Objects.html.
-package gnumake
+package gmk
 
 /*
 #include <gnumake.h>
@@ -22,7 +22,7 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/unmango/gnumake-go/internal/gmk"
+	"github.com/unmango/go-gmk/internal/gnumake"
 )
 
 // Argument expansion modes for [AddFunction].
@@ -55,7 +55,7 @@ func Alloc(n int) []byte {
 	if n <= 0 {
 		return nil
 	}
-	p := gmk.Alloc(uint32(n))
+	p := gnumake.Alloc(uint32(n))
 	if p == nil {
 		return nil
 	}
@@ -74,7 +74,7 @@ func Free(b []byte) {
 // returns the result. The buffer make allocates for the result is freed before
 // returning, so the returned string is owned by Go.
 func Expand(s string) string {
-	p := gmk.Expand(s)
+	p := gnumake.Expand(s)
 	if p == nil {
 		return ""
 	}
@@ -129,15 +129,15 @@ const (
 func AddFunction(name string, fn Func, minArgs, maxArgs int, flags uint) {
 	switch {
 	case name == "" || len(name) > maxNameLen:
-		panic("gnumake: function name must be 1 to 255 bytes")
+		panic("gmk: function name must be 1 to 255 bytes")
 	case fn == nil:
-		panic("gnumake: function must not be nil")
+		panic("gmk: function must not be nil")
 	case minArgs < 0 || minArgs > maxArgCount:
-		panic("gnumake: minArgs must be 0 to 255")
+		panic("gmk: minArgs must be 0 to 255")
 	case maxArgs < 0 || maxArgs > maxArgCount:
-		panic("gnumake: maxArgs must be 0 to 255")
+		panic("gmk: maxArgs must be 0 to 255")
 	case maxArgs != 0 && minArgs > maxArgs:
-		panic("gnumake: minArgs must not exceed maxArgs")
+		panic("gmk: minArgs must not exceed maxArgs")
 	}
 
 	funcsMu.Lock()
@@ -154,7 +154,7 @@ func AddFunction(name string, fn Func, minArgs, maxArgs int, flags uint) {
 	cname := C.CString(name)
 
 	C.gmk_add_function(cname,
-		C.gmk_func_ptr(C.gnumake_go_func_bridge),
+		C.gmk_func_ptr(C.go_gmk_func_bridge),
 		C.uint(minArgs),
 		C.uint(maxArgs),
 		C.uint(flags),

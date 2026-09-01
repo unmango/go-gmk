@@ -17,23 +17,23 @@ import (
 	"strconv"
 	"strings"
 
-	gnumake "github.com/unmango/gnumake-go"
+	"github.com/unmango/go-gmk"
 )
 
 func main() {}
 
 //export plugin_gmk_setup
 func plugin_gmk_setup(*C.gmk_floc) C.int {
-	gnumake.AddFunction("fixture-upper", upper, 1, 1, gnumake.FuncDefault)
-	gnumake.AddFunction("fixture-join", join, 1, 0, gnumake.FuncDefault)
-	gnumake.AddFunction("fixture-repeat", repeat, 1, 1, gnumake.FuncDefault)
-	gnumake.AddFunction("fixture-expand", expand, 1, 1, gnumake.FuncDefault)
+	gmk.AddFunction("fixture-upper", upper, 1, 1, gmk.FuncDefault)
+	gmk.AddFunction("fixture-join", join, 1, 0, gmk.FuncDefault)
+	gmk.AddFunction("fixture-repeat", repeat, 1, 1, gmk.FuncDefault)
+	gmk.AddFunction("fixture-expand", expand, 1, 1, gmk.FuncDefault)
 
 	// Registering twice must replace the Go function without calling into
 	// make again, which make would reject as a duplicate.
-	gnumake.AddFunction("fixture-upper", upper, 1, 1, gnumake.FuncDefault)
+	gmk.AddFunction("fixture-upper", upper, 1, 1, gmk.FuncDefault)
 
-	gnumake.Eval("FIXTURE_FROM_PLUGIN := yes", nil)
+	gmk.Eval("FIXTURE_FROM_PLUGIN := yes", nil)
 
 	return 1
 }
@@ -64,5 +64,5 @@ func repeat(_ string, args []string) string {
 }
 
 func expand(_ string, args []string) string {
-	return gnumake.Expand(args[0])
+	return gmk.Expand(args[0])
 }

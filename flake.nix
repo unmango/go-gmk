@@ -1,5 +1,5 @@
 {
-  description = "Go bindings for GNU Make dynamic object loading";
+  description = "Go bindings for the GNU Make loadable object API";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
