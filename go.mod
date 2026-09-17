@@ -5,7 +5,7 @@ go 1.25.0
 tool github.com/xlab/c-for-go
 
 require (
-	github.com/onsi/ginkgo/v2 v2.32.1
+	github.com/onsi/ginkgo/v2 v2.33.0
 	github.com/onsi/gomega v1.43.0
 )
 
