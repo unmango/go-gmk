@@ -6,7 +6,7 @@ tool github.com/xlab/c-for-go
 
 require (
 	github.com/onsi/ginkgo/v2 v2.32.1
-	github.com/onsi/gomega v1.43.0
+	github.com/onsi/gomega v1.44.0
 )
 
 require (
@@ -20,7 +20,7 @@ require (
 	github.com/tj/go-spin v1.1.0 // indirect
 	github.com/xlab/c-for-go v1.3.0 // indirect
 	github.com/xlab/pkgconfig v0.0.0-20170226114623-cea12a0fd245 // indirect
-	go.yaml.in/yaml/v3 v3.0.4 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/mod v0.36.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
