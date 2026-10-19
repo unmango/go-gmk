@@ -1,5 +1,7 @@
 # go-gmk
 
+[![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/go-gmk/badge)](https://hercules-ci.com/github/unmango/go-gmk)
+
 Go bindings for the GNU Make loadable object API.
 
 The package binds the `gmk_` functions `gnumake.h` declares, which are what a shared object loaded with make's `load` directive can call.
