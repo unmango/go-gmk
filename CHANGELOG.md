@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/unmango/go-gmk/compare/v0.1.1...v0.2.0) (2026-10-24)
+
+
+### Features
+
+* Error and Warning report from a function the way $(error) and $(warning) do ([#40](https://github.com/unmango/go-gmk/issues/40)) ([47639b5](https://github.com/unmango/go-gmk/commit/47639b52a1db0e565fa33cdcc7b3ab6c92e58359))
+
 ## [0.1.1](https://github.com/unmango/go-gmk/compare/v0.1.0...v0.1.1) (2026-10-24)
 
 
