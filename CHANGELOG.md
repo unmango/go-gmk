@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/unmango/go-gmk/compare/v0.1.0...v0.1.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.33.1 ([#25](https://github.com/unmango/go-gmk/issues/25)) ([2aa2fcc](https://github.com/unmango/go-gmk/commit/2aa2fccb335640cb6e9799bc24098476560d433c))
+* **deps:** update module github.com/onsi/gomega to v1.44.0 ([#28](https://github.com/unmango/go-gmk/issues/28)) ([ccbb057](https://github.com/unmango/go-gmk/commit/ccbb057a9de9dc4592d7a3c2755c706782d3ef98))
+
 ## [0.1.0](https://github.com/unmango/go-gmk/compare/v0.0.2...v0.1.0) (2026-09-01)
 
 
