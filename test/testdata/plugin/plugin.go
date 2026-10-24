@@ -43,6 +43,8 @@ func plugin_gmk_setup(*C.gmk_floc) C.int {
 	gmk.AddFunction("fixture-panics", panics, 1, 1, gmk.FuncDefault)
 	gmk.AddFunction("fixture-eval", evalNow, 1, 1, gmk.FuncNoExpand)
 	gmk.AddFunction("fixture-eval-at", evalAt, 1, 1, gmk.FuncNoExpand)
+	gmk.AddFunction("fixture-error", fail, 1, 1, gmk.FuncDefault)
+	gmk.AddFunction("fixture-warning", warn, 1, 1, gmk.FuncDefault)
 
 	// raw and expanded are the same Go function under two registrations that
 	// differ only in flags, so a spec can compare what each one receives.
@@ -236,4 +238,28 @@ func evalAt(_ string, args []string) string {
 	})
 
 	return ""
+}
+
+// messages are texts make would read as syntax if they reached it as a literal
+// function argument: a reference, an unbalanced parenthesis, and a comma.
+var messages = map[string]string{
+	"plain":  "something went wrong",
+	"dollar": "costs $(HOME) and $$",
+	"paren":  "unbalanced ) here (",
+	"comma":  "a, b",
+}
+
+// fail stops make with the message keyed by args[0].
+func fail(_ string, args []string) string {
+	gmk.Error(messages[strings.TrimSpace(args[0])])
+
+	return "after-error"
+}
+
+// warn prints the message keyed by args[0] and returns, so a spec can see make
+// carried on.
+func warn(_ string, args []string) string {
+	gmk.Warning(messages[strings.TrimSpace(args[0])])
+
+	return "after-warning"
 }

@@ -59,6 +59,19 @@ all:
 	@echo $(HELLO_FROM_PLUGIN)    # yes
 ```
 
+A function reports a failure with `gmk.Error`, which stops make the way `$(error ...)` does, or warns with `gmk.Warning`.
+The text reaches make as a function result, so a `$` or an unbalanced parenthesis in it is printed as written:
+
+```go
+func files(_ string, args []string) string {
+	out, err := list(args)
+	if err != nil {
+		gmk.Error(err.Error()) // Makefile:4: *** open x.tdl: no such file or directory.  Stop.
+	}
+	return out
+}
+```
+
 The build tag keeps the plugin out of `go build ./...`, which cannot link a `main` package against symbols that only exist inside make.
 
 `plugin_is_GPL_compatible` is defined by this package, so importing it satisfies make's check.
